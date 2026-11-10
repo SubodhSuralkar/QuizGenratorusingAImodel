@@ -62,6 +62,7 @@ print(f"You have got {newscore}%.")
 # i can create new function with new dataset
 
 
+"""
 
 quiz_questions = [
     {
@@ -110,3 +111,58 @@ if user == "yes":
     quiz(quiz_questions)
 else:
     quit()
+
+"""
+#-----------------------------------------------------------------------------=======================================================
+#ahumm ahumm so i wanted to do something special so i added ai modeelllll to genrate questions instead of predefined dataset so it can genrate quiz on any topic
+# hehe this is so much better feelin like got a upgrade from square to round tires 
+
+import json
+
+from google import genai
+
+client = genai.Client(api_key="Paste you API key here")
+
+def get_ai_question(topic):
+    prompt=f"""  Create 10 Quiz Question about {topic} 
+                return only a raw json array of objects like this:
+                [
+                {{"question": "What does CPU stand for? ", "answer": "central processing unit"}}
+                ]
+                Keep answers direct, short, and lowercase.
+"""
+    response = client.models.generate_content(
+        model="gemini-3.6-flash",contents=prompt
+    )
+    raw_text = response.text.strip().strip('`').replace("json","").strip()
+    return json.loads(raw_text)
+
+def quiz(question):
+
+    total_questions = len(question)
+    score = 0 
+    for q in question:
+        user_answer = input(f"{q['question']}" .lower())
+        if user_answer == q['answer']:
+            print('Correct Answer')
+            score += 1
+        else:
+            print("Incorrect Answer")
+
+    percent = (score/total_questions) *100
+    print(f"You got {percent}%. 🥹👌🙌")
+
+user_input = input("Do you wanna play? ").lower().strip()
+if user_input == 'yes':
+    topic =input("What do you want the quiz to be about? \n Enter the topic--> ")
+    print("Processing-------%----")
+    try:
+        ai_questions = get_ai_question(topic)
+        quiz(ai_questions)
+    except Exception as e:
+        print(f"Error generating AI questions: {e}")
+        print("Falling back to default questions...\n")
+else:
+    print("Let's play Next time")
+    quit()
+    
