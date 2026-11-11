@@ -165,4 +165,5 @@ if user_input == 'yes':
 else:
     print("Let's play Next time")
     quit()
-    
+
+#first tine ritinfwriting the code ALL BY MY OWN HANDS FOR 3 HOURS CONSISTENTLY FINDING AND SOLVING BUGS
